@@ -62,14 +62,14 @@ public class ArrayMethods
         if (values.length % 2 == 0)
         {
             storage = values.length / 2;
-            values[storage].remove;
-            values[storage-1].remove;
+            //values[storage].remove();
+            //values[storage-1].remove();
         }
         else
         {
             storage = values.length / 2;
             storage = values.length - storage;
-            values[storage-1].remove;
+            //values[storage-1].remove();
         }
     }
 }
