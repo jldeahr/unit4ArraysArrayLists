@@ -24,6 +24,8 @@ public class Radar
     
     // number of scans of the radar since construction
     private int numScans;
+    
+    private int topDistance = 5;
 
     /**
      * Constructor for objects of class Radar
@@ -41,9 +43,9 @@ public class Radar
         //  setMonsterLocation method
         //monsterLocationRow = (int)(Math.random() * rows);
         //monsterLocationCol = (int)(Math.random() * cols);
-        Scanner in = new Scanner();
-        
-        setMonsterLocation(System.out.print("Enter the row: "), System.in("Enter the column: "));
+        //Scanner in = new Scanner();
+        setMonsterLocation(50,50);
+        //setMonsterLocation(System.out.print("Enter the row: "), System.in("Enter the column: "));
         
         noiseFraction = 0.05;
         numScans= 0;
@@ -72,17 +74,16 @@ public class Radar
         injectNoise();
         
         // udpate the accumulator
-        for(int row = 0; row < currentScan.length; row++)
+        for (int row = 0; row < currentScan.length; row++)
         {
-            for(int col = 0; col < currentScan[0].length; col++)
+        for (int col = 0; col < currentScan[0].length; col++)
+        {
+            if (currentScan[row][col] )
             {
-                if(currentScan[row][col] == true)
-                {
-                   accumulator[row][col]++;
-                }
+                
             }
         }
-        
+  
         // keep track of the total number of scans
         numScans++;
     }
