@@ -1,4 +1,4 @@
-
+import java.util.Scanner;
 /**
  * The model for radar scan and accumulator
  * 
@@ -10,6 +10,7 @@ public class Radar
     
     // stores whether each cell triggered detection for the current scan of the radar
     private boolean[][] currentScan;
+    private boolean[][] lastScan;
     
     // value of each cell is incremented for each scan in which that cell triggers detection 
     private int[][] accumulator;
@@ -38,8 +39,11 @@ public class Radar
         
         // randomly set the location of the monster (can be explicity set through the
         //  setMonsterLocation method
-        monsterLocationRow = (int)(Math.random() * rows);
-        monsterLocationCol = (int)(Math.random() * cols);
+        //monsterLocationRow = (int)(Math.random() * rows);
+        //monsterLocationCol = (int)(Math.random() * cols);
+        Scanner in = new Scanner();
+        
+        setMonsterLocation(System.out.print("Enter the row: "), System.in("Enter the column: "));
         
         noiseFraction = 0.05;
         numScans= 0;
@@ -60,8 +64,9 @@ public class Radar
             }
         }
         
+        lastScan = currentScan;
         // detect the monster
-        currentScan[monsterLocationRow][monsterLocationCol] = true;
+        //currentScan[monsterLocationRow][monsterLocationCol] = true;
         
         // inject noise into the grid
         injectNoise();
