@@ -1,4 +1,3 @@
-import java.util.Scanner;
 /**
  * The model for radar scan and accumulator
  * 
@@ -28,6 +27,12 @@ public class Radar
     // distance in x and y directions
     public int dx;
     public int dy;
+    
+    //current rows anc cols
+    public int row;
+    public int col;
+    public int curRow;
+    public int curCol;
 
     /**
      * Constructor for objects of class Radar
@@ -35,20 +40,23 @@ public class Radar
      * @param   rows    the number of rows in the radar grid
      * @param   cols    the number of columns in the radar grid
      */
-    public Radar(int rows, int cols, int dx, int dy)
+    public Radar(int rows, int cols, int dx, int dy, int row, int col)
     {
         // initialize instance variables
         currentScan = new boolean[rows][cols]; // elements will be set to false
         accumulator = new int[rows][cols]; // elements will be set to 0
         dx = dx;
         dy = dy;
+        row = row;
+        col = col;
+        
         
         // randomly set the location of the monster (can be explicity set through the
         //  setMonsterLocation method
         //monsterLocationRow = (int)(Math.random() * rows);
         //monsterLocationCol = (int)(Math.random() * cols);
         //Scanner in = new Scanner();
-        setMonsterLocation(50,50);
+        setMonsterLocation(row,col);
         //setMonsterLocation(System.out.print("Enter the row: "), System.in("Enter the column: "));
         
         noiseFraction = 0.05;
@@ -62,22 +70,23 @@ public class Radar
     public void scan()
     {
         // zero the current scan grid
-        for(int row = 0; row < currentScan.length; row++)
+        for(int rows = 0; rows < currentScan.length; rows++)
         {
-            for(int col = 0; col < currentScan[0].length; col++)
+            for(int cols = 0; cols < currentScan[0].length; cols++)
             {
-                currentScan[row][col] = false;
+                currentScan[rows][cols] = false;
             }
         }
         
         //scans the grid
-        for(int row = 0; row < currentScan.length; row++)
+        for(int rows = 0; rows < currentScan.length; rows++)
         {
-            for(int col = 0; col < currentScan[0].length; col++)
+            for(int cols = 0; cols < currentScan[0].length; cols++)
             {
-                if (this.isDetected(row,col)
+                if (this.isDetected(rows,cols) == true)
                 {
-                    currentScan[row][col] = true;
+                    currentScan[rows][cols] = true;
+                    //System.out.println(currentScan[rows][cols]);
                 }
             }
         }
@@ -86,20 +95,30 @@ public class Radar
         prevScan = currentScan;
         
         //move monster
+        this.row += dx;
+        this.col += dy;
+        setMonsterLocation(this.row, this.col);
         
         // inject noise into the grid
         injectNoise();
         
         // udpate the accumulator
-        for (int row = 0; row < currentScan.length; row++)
+        for (int rows = 0; rows < currentScan.length; rows++)
         {
-            for (int col = 0; col < currentScan[0].length; col++)
+            for (int cols = 0; cols < currentScan[0].length; cols++)
             {
-                for (int row2 = 0; row2 < prevScan.length; row2++)
+                for (int rows2 = 0; rows2 < prevScan.length; rows2++)
                 {
-                    for (int col2 = 0; col2 < currentScan[0].length; col2++)
+                    for (int cols2 = 0; cols2 < prevScan[0].length; cols2++)
                     {
-                        
+                        if (this.isDetected(rows,cols) == true && rows-rows2 >= 0 && cols-cols2 >= 0)
+                        {
+                            accumulator[rows-rows2][cols-cols2] += 1;
+                        }
+                        else if (this.isDetected(rows,cols) == true && rows2-rows >=0 && cols2-cols >=0)
+                        {
+                            accumulator[rows2-rows][cols2-cols] += 1;
+                        }
                     }
                 }
             }
@@ -109,6 +128,28 @@ public class Radar
         numScans++;
     }
 
+    
+    /**
+     * Finds the velocity of the monster
+     * 
+     * @return greatest     the index of the greatest object
+     * 
+     */
+    public void findVelocity()
+    {
+        int greatest = 0;
+        for (int i = 0; i < accumulator.length; i++)
+        {
+            for (int j = 0; j < accumulator[1].length; j++)
+            {
+                if (accumulator[i][j] > 0)
+                {
+                    greatest = accumulator[i][j];
+                }
+            }
+        }
+    }
+    
     /**
      * Sets the location of the monster
      * 

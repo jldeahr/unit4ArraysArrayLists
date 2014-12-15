@@ -1,4 +1,5 @@
 import javax.swing.JFrame;
+import java.util.Scanner;
 
 /**
  * Class that contains the main method for the program and creates the frame containing the component.
@@ -17,8 +18,22 @@ public class RadarViewer
         // create the radar, set the monster location, and perform the initial scan
         final int ROWS = 100;
         final int COLS = 100;
-        Radar radar = new Radar(ROWS, COLS);
-        radar.setNoiseFraction(0.10);
+
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter the row: ");
+        int row = in.nextInt();
+        System.out.println("Enter the column: ");
+        int col = in.nextInt();
+        System.out.println("Enter dx: ");
+        int dx = in.nextInt();
+        System.out.println("Enter dy: ");
+        int dy = in.nextInt();
+        
+        
+        
+        Radar radar = new Radar(ROWS, COLS, dx, dy, row, col);
+        radar.setNoiseFraction(0.0005);
+        
         radar.scan();
         
         JFrame frame = new JFrame();
@@ -41,7 +56,7 @@ public class RadarViewer
         // after each scan, instruct the Java Run-Time to redraw the window
         for(int i = 0; i < 100; i++)
         {
-            Thread.sleep(100); // sleep 100 milliseconds (1/10 second)
+            Thread.sleep(3000); // sleep 100 milliseconds (1/10 second)
             
             radar.scan();
             
