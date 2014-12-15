@@ -8,7 +8,7 @@ public class Radar
 {
     
     // stores whether each cell triggered detection for the current scan of the radar
-    private boolean[][] currentScan;
+    public boolean[][] currentScan;
     private boolean[][] prevScan;
     
     // value of each cell is incremented for each scan in which that cell triggers detection 
@@ -27,6 +27,7 @@ public class Radar
     // distance in x and y directions
     public int dx;
     public int dy;
+    public int slope;
     
     //current rows anc cols
     public int row;
@@ -47,20 +48,16 @@ public class Radar
         accumulator = new int[rows][cols]; // elements will be set to 0
         dx = dx;
         dy = dy;
-        row = row;
-        col = col;
         
         
         // randomly set the location of the monster (can be explicity set through the
         //  setMonsterLocation method
-        //monsterLocationRow = (int)(Math.random() * rows);
-        //monsterLocationCol = (int)(Math.random() * cols);
-        //Scanner in = new Scanner();
         setMonsterLocation(row,col);
-        //setMonsterLocation(System.out.print("Enter the row: "), System.in("Enter the column: "));
+        //monsterLocationRow = row;
+        //monsterLocationCol = col;
         
         noiseFraction = 0.05;
-        numScans= 0;
+        numScans = 0;
     }
     
     /**
@@ -95,9 +92,9 @@ public class Radar
         prevScan = currentScan;
         
         //move monster
+        currentScan[row][col] = true;
         this.row += dx;
         this.col += dy;
-        setMonsterLocation(this.row, this.col);
         
         // inject noise into the grid
         injectNoise();
@@ -111,11 +108,11 @@ public class Radar
                 {
                     for (int cols2 = 0; cols2 < prevScan[0].length; cols2++)
                     {
-                        if (this.isDetected(rows,cols) == true && rows-rows2 >= 0 && cols-cols2 >= 0)
+                        if (this.isDetected(rows,cols) == true && rows-rows2 >= 0 && cols-cols2 >= 0 && rows-rows2 <= 5 && cols-cols2 <= 5)
                         {
                             accumulator[rows-rows2][cols-cols2] += 1;
                         }
-                        else if (this.isDetected(rows,cols) == true && rows2-rows >=0 && cols2-cols >=0)
+                        else if (this.isDetected(rows,cols) == true && rows2-rows >=0 && cols2-cols >=0 && rows2-rows <=0 && cols2-cols <=0)
                         {
                             accumulator[rows2-rows][cols2-cols] += 1;
                         }
@@ -135,7 +132,7 @@ public class Radar
      * @return greatest     the index of the greatest object
      * 
      */
-    public void findVelocity()
+    public int findVelocity()
     {
         int greatest = 0;
         for (int i = 0; i < accumulator.length; i++)
@@ -148,6 +145,18 @@ public class Radar
                 }
             }
         }
+        for (int i = 0; i < accumulator.length; i++)
+        {
+            for (int j = 0; j < accumulator[1].length; j++)
+            {
+                if (accumulator[i][j] == greatest)
+                {
+                    System.out.println("The velocity is, x: " + i + " y: " + j);
+                    slope = j/i;
+                }
+            }
+        }
+        return slope;
     }
     
     /**
