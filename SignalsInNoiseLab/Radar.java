@@ -76,17 +76,17 @@ public class Radar
         }
         
         //scans the grid
-        for(int rows = 0; rows < currentScan.length; rows++)
-        {
-            for(int cols = 0; cols < currentScan[0].length; cols++)
-            {
-                if (this.isDetected(rows,cols) == true)
-                {
-                    currentScan[rows][cols] = true;
+        //for(int rows = 0; rows < currentScan.length; rows++)
+        //{
+        //    for(int cols = 0; cols < currentScan[0].length; cols++)
+        //    {
+        //        if (this.isDetected(rows,cols) == true)
+        //        {
+        //            currentScan[rows][cols] = true;
                     //System.out.println(currentScan[rows][cols]);
-                }
-            }
-        }
+        //        }
+        //    }
+        //}
         
         //prepares for comparisons
         prevScan = currentScan;
@@ -108,15 +108,23 @@ public class Radar
                 {
                     for (int cols2 = 0; cols2 < prevScan[0].length; cols2++)
                     {
-                        if (this.isDetected(rows,cols) == true && rows-rows2 >= 0 && cols-cols2 >= 0 && rows-rows2 <= 5 && cols-cols2 <= 5)
+                        if (currentScan[rows][cols] == true &&
+                            rows-rows2 >= 0 &&
+                            cols-cols2 >= 0 &&
+                            rows-rows2 <= 5 &&
+                            cols-cols2 <= 5)
                         {
                             accumulator[rows-rows2][cols-cols2] += 1;
                         }
-                        else if (this.isDetected(rows,cols) == true && rows2-rows >=0 && cols2-cols >=0 && rows2-rows <=0 && cols2-cols <=0)
+                         else if (currentScan[rows][cols] == true &&
+                                 rows2-rows >=0 &&
+                                 cols2-cols >=0 &&
+                                 rows2-rows <=5 &&
+                                 cols2-cols <=5)
                         {
                             accumulator[rows2-rows][cols2-cols] += 1;
                         }
-                    }
+                    } 
                 }
             }
         }
@@ -135,13 +143,16 @@ public class Radar
     public int findVelocity()
     {
         int greatest = 0;
+        int xVal = 0;
+        int yVal = 0;
         for (int i = 0; i < accumulator.length; i++)
         {
-            for (int j = 0; j < accumulator[1].length; j++)
+            for (int j = 0; j < accumulator[0].length; j++)
             {
                 if (accumulator[i][j] > 0)
                 {
                     greatest = accumulator[i][j];
+                    System.out.print(greatest);
                 }
             }
         }
@@ -151,7 +162,9 @@ public class Radar
             {
                 if (accumulator[i][j] == greatest)
                 {
-                    System.out.println("The velocity is, x: " + i + " y: " + j);
+                    xVal = i-4;
+                    yVal = j-4;
+                    System.out.println("The velocity is, x: " + xVal + " y: " + yVal);
                     slope = j/i;
                 }
             }
