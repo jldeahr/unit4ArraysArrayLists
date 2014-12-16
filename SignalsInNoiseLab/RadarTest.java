@@ -64,7 +64,7 @@ public class RadarTest
         {
             radar.scan();
         }
-        if (radar.slope = )
+        if (radar.slope != 3/3)
         {
             assertNotNull("expected slope of 1");
         }   
@@ -84,5 +84,18 @@ public class RadarTest
         {
             assertNotNull("expected slope of 3/3");
         }   
+    }
+    
+    @Test
+    public void testPrintAccumulator() throws InterruptedException
+    {
+        Radar radar = new Radar(100, 100, 3, 3, 50, 50);
+        radar.setNoiseFraction(0.0005);
+        
+        for (int i = 0; i < 20; i++)
+        {
+            radar.scan();
+        }
+        radar.printAccumulator();   
     }
 }
