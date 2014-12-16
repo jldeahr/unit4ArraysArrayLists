@@ -45,7 +45,8 @@ public class Radar
     {
         // initialize instance variables
         currentScan = new boolean[rows][cols]; // elements will be set to false
-        accumulator = new int[rows][cols]; // elements will be set to 0
+        accumulator = new int[row][col]; // elements will be set to 0 with accumulator length
+                                         // of 10 for both dimensions
         dx = dx;
         dy = dy;
         
@@ -64,7 +65,7 @@ public class Radar
      * Performs a scan of the radar. Noise is injected into the grid and the accumulator is updated.
      * 
      */
-    public void scan() throws InterruptedException
+    public void scan() //throws InterruptedException
     {
         // zero the current scan grid
         for(int rows = 0; rows < currentScan.length; rows++)
@@ -110,11 +111,11 @@ public class Radar
                     {
                         if (currentScan[rows][cols] == true &&
                             rows-rows2 >= 0 &&
-                            cols-cols2 >= 0 &&
-                            rows-rows2 <= 5 &&
-                            cols-cols2 <= 5)
+                            rows-rows2 <= 10 &&
+                            cols-cols2 >= 0 &&                            
+                            cols-cols2 <= 10)
                         {
-                            Thread.sleep(5);
+                            //Thread.sleep(5);
                             System.out.println("rows-rows2");
                             System.out.println("rows2: " + rows2 + " rows: " + rows + " cols2 " + cols2 + " cols: " + cols);
                             System.out.println("added to accumulator: " + accumulator[rows-rows2][cols-cols2]);
@@ -122,11 +123,11 @@ public class Radar
                         }
                          else if (currentScan[rows][cols] == true &&
                                  rows2-rows >=0 &&
-                                 cols2-cols >=0 &&
-                                 rows2-rows <=5 &&
-                                 cols2-cols <=5)
+                                 rows2-rows <=10 &&
+                                 cols2-cols >=0 &&                                 
+                                 cols2-cols <=10)
                         {
-                            Thread.sleep(5);
+                            //Thread.sleep(5);
                             System.out.println("rows2-rows");
                             System.out.println("rows2: " + rows2 + " rows: " + rows + " cols2 " + cols2 + " cols: " + cols);
                             System.out.println("added to accumulator: " + accumulator[rows2-rows][cols2-cols]);
@@ -148,7 +149,7 @@ public class Radar
      * @return greatest     the index of the greatest object
      * 
      */
-    public int findVelocity()
+    public void findVelocity()
     {
         int greatest = 0;
         int xVal = 0;
@@ -172,12 +173,40 @@ public class Radar
                 {
                     xVal = i-4;
                     yVal = j-4;
+                    xVal = opposite(xVal);
+                    yVal = opposite(yVal);
                     System.out.println("The velocity is, x: " + xVal + " y: " + yVal);
-                    slope = j/i;
+                    //slope = j/i;
                 }
             }
         }
-        return slope;
+        //return slope;
+    }
+    
+    public int opposite(int num)
+    {
+        if (num > 0)
+        {
+            num = 0-num;
+        }
+        else if (num < 0)
+        {
+            num = 0+num;
+        }
+        return num;
+    }
+    
+    public void printAccumulator() throws InterruptedException
+    {
+        for (int i = 0; i < accumulator.length; i++)
+        {
+            for (int j = 0; j < accumulator[1].length; j++)
+            {                
+                System.out.print(accumulator[i][j]);
+                Thread.sleep(10);
+            }
+            System.out.println("");
+        }
     }
     
     /**
@@ -231,7 +260,8 @@ public class Radar
      */
     public int getAccumulatedDetection(int row, int col)
     {
-        return accumulator[row][col];
+        //was return accumulator[row][col];
+        return accumulator[10][10];
     }
     
     /**
