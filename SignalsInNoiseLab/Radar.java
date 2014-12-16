@@ -64,7 +64,7 @@ public class Radar
      * Performs a scan of the radar. Noise is injected into the grid and the accumulator is updated.
      * 
      */
-    public void scan()
+    public void scan() throws InterruptedException
     {
         // zero the current scan grid
         for(int rows = 0; rows < currentScan.length; rows++)
@@ -114,6 +114,10 @@ public class Radar
                             rows-rows2 <= 5 &&
                             cols-cols2 <= 5)
                         {
+                            Thread.sleep(5);
+                            System.out.println("rows-rows2");
+                            System.out.println("rows2: " + rows2 + " rows: " + rows + " cols2 " + cols2 + " cols: " + cols);
+                            System.out.println("added to accumulator: " + accumulator[rows-rows2][cols-cols2]);
                             accumulator[rows-rows2][cols-cols2] += 1;
                         }
                          else if (currentScan[rows][cols] == true &&
@@ -122,6 +126,10 @@ public class Radar
                                  rows2-rows <=5 &&
                                  cols2-cols <=5)
                         {
+                            Thread.sleep(5);
+                            System.out.println("rows2-rows");
+                            System.out.println("rows2: " + rows2 + " rows: " + rows + " cols2 " + cols2 + " cols: " + cols);
+                            System.out.println("added to accumulator: " + accumulator[rows2-rows][cols2-cols]);
                             accumulator[rows2-rows][cols2-cols] += 1;
                         }
                     } 
@@ -149,7 +157,7 @@ public class Radar
         {
             for (int j = 0; j < accumulator[0].length; j++)
             {
-                if (accumulator[i][j] > 0)
+                if (accumulator[i][j] > greatest)
                 {
                     greatest = accumulator[i][j];
                     System.out.print(greatest);
